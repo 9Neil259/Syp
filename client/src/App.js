@@ -17,7 +17,7 @@ const App = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/events');
+      const response = await axios.get(`http://localhost:3001/events`);
       setEvents(response.data);
     } catch (error) {
       console.error(error);
@@ -26,7 +26,7 @@ const App = () => {
 
   const createEvent = async (event) => {
     try {
-      const response = await axios.post('http://localhost:3001/events', event);
+      const response = await axios.post(`http://localhost:3001/events`, event);
       console.log(response.data);
       fetchEvents();
     } catch (error) {
@@ -36,7 +36,7 @@ const App = () => {
 
   const selectEvent = async (id) => {
     try {
-      const response = await axios.get('http://localhost:3001/events/${id}');
+      const response = await axios.get(`http://localhost:3001/events/${id}`);
       console.log(response.data);
       setSelectedEvent(response.data);
     } catch (error) {
