@@ -43,7 +43,7 @@ app.get('/events', (req, res) => {
       // and store the events in the cache
       const events = [
         { id: 1, name: 'Abend', date: '04.02.00', location: 'Graz' },
-        { id: 2, name: 'Event 2', date: '05.06.57', location: 'Wien' },
+        { id: 2, name: 'Arbeit', date: '05.06.57', location: 'Wien' },
         { id: 3, name: 'Event 3', date: '07.01.74', location: 'Graz' },
       ];
 
@@ -68,13 +68,14 @@ app.post('/events', (req, res) => {
       res.status(500).json({ error: 'Fehler beim Abrufen der Events' });
     } else if (data) {
       const events = JSON.parse(data);
-      events.push(event);
-      client.set('events', JSON.stringify(events));
-      res.status(201).json(event);
+      const event = events.find((event) => event.id === eventId);
+      if (event) {
+        res.json(event);
+      } else {
+        res.status(404).json({ error: 'Event nicht gefunden' });
+      }
     } else {
-      const events = [event];
-      client.set('events', JSON.stringify(events));
-      res.status(201).json(event);
+      res.status(404).json({ error: 'Event nicht gefunden' });
     }
   });
 });
