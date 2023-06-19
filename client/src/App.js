@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './App.css';
+import 'tailwindcss/tailwind.css';
 import EventForm from './components/EventForm';
 import EventDetails from './components/EventDetails';
 import GuestList from './components/GuestList';
 import EventList from './components/EventList';
-import SelectedEvents from './components/SelectedEvents';
 
 const App = () => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedEvents, setSelectedEvents] = useState([]);
+  const [showEventList, setShowEventList] = useState(false);
 
   useEffect(() => {
     fetchEvents();
@@ -34,36 +36,45 @@ const App = () => {
     }
   };
 
-  const selectEvent = async (id) => {
-    try {
-      const response = await axios.get(`http://localhost:3001/events/${id}`);
-      console.log(response.data);
-      setSelectedEvent(response.data);
-    } catch (error) {
-      console.error(error);
-    }
+  const selectEvent = (event) => {
+    setSelectedEvent(event);
   };
 
   const addSelectedEvent = (event) => {
     setSelectedEvents([...selectedEvents, event]);
   };
-  
 
   const removeSelectedEvent = (id) => {
     setSelectedEvents(selectedEvents.filter((event) => event.id !== id));
   };
 
+  const handleShowEvents = () => {
+    setShowEventList(true);
+  };
+
   return (
-    <div>
-      <h1>Event Planning App</h1>
+  <div>
+      <header className="bg-green">
+  <div >
+    <h1 >Event Planning App</h1>
+    <button onClick={handleShowEvents}>
+      Events
+    </button>
+  </div>
       <EventForm onCreate={createEvent} />
-      <EventList events={events} onSelect={selectEvent} />
-      <EventDetails event={selectedEvent} />
-      <SelectedEvents
-        selectedEvents={selectedEvents}
-        onRemoveEvent={removeSelectedEvent}
-      />
-      <GuestList event={selectedEvent} />
+      </header>
+      {showEventList && (
+        <div>
+          <EventList events={events} onSelect={selectEvent} onAddEvent={addSelectedEvent} />
+          <p>Select an event to view details</p>
+        </div>  
+      )}
+      {selectedEvent && (
+        <div className='a'>
+          <EventDetails event={selectedEvent} />
+          <GuestList event={selectedEvent} />
+        </div>
+      )}
     </div>
   );
 };

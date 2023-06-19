@@ -23,7 +23,7 @@ const EventForm = ({ onCreate }) => {
         onChange={e => setName(e.target.value)}
       />
       <input
-        type="text"
+        type="date"
         placeholder="Event Date"
         value={date}
         onChange={e => setDate(e.target.value)}

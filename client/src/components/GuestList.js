@@ -1,16 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const GuestList = ({ event }) => {
-  if (!event) {
-    return null;
-  }
+  const [guestName, setGuestName] = useState('');
+  const [guests, setGuests] = useState([]);
+
+  useEffect(() => {
+    setGuests([]);
+  }, [event]);
+
+  const handleInputChange = (e) => {
+    setGuestName(e.target.value);
+  };
+
+  const addGuest = () => {
+    if (guestName.trim() !== '') {
+      setGuests([...guests, guestName]);
+      setGuestName('');
+    }
+  };
 
   return (
     <div>
-      <h3>Guest List</h3>
+      <h2>Guest List for {event.name}</h2>
+      <input type="text" value={guestName} onChange={handleInputChange} />
+      <button onClick={addGuest}>Add Guest</button>
       <ul>
-        {event.guests.map(guest => (
-          <li key={guest.id}>{guest.name}</li>
+        {guests.map((guest, index) => (
+          <li key={index}>{guest}</li>
         ))}
       </ul>
     </div>
