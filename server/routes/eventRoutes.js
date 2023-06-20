@@ -32,4 +32,15 @@ router.post('/', (req, res) => {
   });
 });
 
+router.delete('/:id', (req, res) => {
+  const eventId = req.params.id;
+  Event.deleteEvent(eventId, (result) => {
+    if (result.success) {
+      res.json({ success: true, message: result.message });
+    } else {
+      res.status(500).json({ error: result.message });
+    }
+  });
+});
+
 module.exports = router;
